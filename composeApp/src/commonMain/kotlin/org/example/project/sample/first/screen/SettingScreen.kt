@@ -17,7 +17,7 @@ class SettingScreen :Screen{
     @Composable
     override fun Content() {
 
-        Box(modifier = Modifier.fillMaxSize().background(Color.Green), contentAlignment = Alignment.Center){
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
 
             Text("Welcome Setting Screen.", fontSize = 26.sp, color = Color.White)
 

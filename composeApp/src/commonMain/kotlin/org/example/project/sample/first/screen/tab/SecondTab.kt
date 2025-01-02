@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
+import org.example.project.sample.first.screen.SecondScreen
 
 object SecondTab : Tab {
 
@@ -29,11 +30,7 @@ object SecondTab : Tab {
 
     @Composable
     override fun Content() {
-        Box(modifier = Modifier.fillMaxSize().background(Color.Green), contentAlignment = Alignment.Center){
-
-            Text("SecondScreen", fontSize = 22.sp, color = Color.Black)
-
-        }
+       SecondScreen().Content();
     }
 
 

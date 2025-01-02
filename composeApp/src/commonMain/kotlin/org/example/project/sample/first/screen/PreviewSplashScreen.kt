@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.LinearProgressIndicator
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -50,7 +51,7 @@ class PreviewSplashScreen : Screen {
         // Proceso de carga simulada
         LaunchedEffect(Unit) {
             while (progress < 1f) {
-                delay(150) // Simula el tiempo de carga
+                delay(50) // Simula el tiempo de carga
                 progress += 0.02f
             }
             // Acción al finalizar la carga
@@ -60,7 +61,7 @@ class PreviewSplashScreen : Screen {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color(0xFF0F1C44)), // Fondo azul oscuro
+                .background(MaterialTheme.colors.background), // Fondo azul oscuro
             contentAlignment = Alignment.Center
         ) {
 

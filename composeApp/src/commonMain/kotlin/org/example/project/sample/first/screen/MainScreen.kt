@@ -1,35 +1,44 @@
 package org.example.project.sample.first.screen
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.verticalScroll
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.Navigator
+import cafe.adriel.voyager.navigator.currentOrThrow
+import com.russhwolf.settings.Settings
+import org.example.project.sample.first.dto.Event
+import org.example.project.sample.first.screen.SecondScreen.Companion.EVENT_STORE
+import org.example.project.sample.first.util.DatoUtils
 
 class MainScreen : Screen {
 
+
+    private val setting : Settings = Settings();
 
 
     @Composable
@@ -37,7 +46,8 @@ class MainScreen : Screen {
 
         val scrollState = rememberScrollState()
 
-
+        val navigator = LocalNavigator.currentOrThrow
+        val event = setting.getStringOrNull(EVENT_STORE)
 
             Column(
                 modifier = Modifier
@@ -54,7 +64,7 @@ class MainScreen : Screen {
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = "APERTURA DE PIERNAS",
+                        text = "Tareas",
                         color = Color.White,
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold
@@ -71,9 +81,9 @@ class MainScreen : Screen {
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        NivelButton("Principiante", isSelected = true)
-                        NivelButton("Intermedio", isSelected = false)
-                        NivelButton("Avanzado", isSelected = false)
+                        NivelButton("New Event", navigator)
+                        NivelButton("Intermedio", navigator)
+                        NivelButton("Avanzado", navigator)
                     }
                 }
 
@@ -91,9 +101,14 @@ class MainScreen : Screen {
                         verticalArrangement = Arrangement.Center
                     ) {
                         // Lista de días
-                        for (day in 1..5) {
-                            DiaCard(dia = day, porcentaje = 0)
-                            Spacer(modifier = Modifier.height(8.dp))
+                        println("event $event")
+                        if (event != null) {
+                            val events = DatoUtils().convertJsonStringToObjectArray(event)
+
+                            for (ev in events) {
+                                DiaCard(event = ev, porcentaje = 0)
+                                Spacer(modifier = Modifier.height(8.dp))
+                            }
                         }
                     }
 
@@ -107,39 +122,57 @@ class MainScreen : Screen {
 }
 
 @Composable
-fun NivelButton(text: String, isSelected: Boolean) {
+fun NivelButton(text: String, navegador : Navigator) {
     Button(
-        onClick = { /* Acción para cambiar de nivel */ },
+        onClick = {
+            println("clien button")
+        },
         colors = ButtonDefaults.buttonColors(
-            contentColor =if (isSelected) Color.Green else Color.Gray
+            contentColor =Color(0xFF01d89d)
         ),
 //        modifier = Modifier.weight(1f)
     ) {
         Text(
+
             text = text,
-            color = if (isSelected) Color.Black else Color.White,
+            color =  Color.Black,
             fontSize = 14.sp
         )
     }
 }
 
 @Composable
-fun DiaCard(dia: Int, porcentaje: Int) {
+fun DiaCard(event: Event, porcentaje: Int) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(60.dp)
+            .height(80.dp)
             .background(Color.Gray, shape = RoundedCornerShape(8.dp))
             .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(
-            text = "$dia ° Día",
-            color = Color.Black,
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Bold
-        )
+
+        Column {
+            Text(
+                text = event.name,
+                color = Color.Black,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                text = event.eventDate.toString(),
+                color = Color.Black,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                text = "remaning ${event.dayRemain} days",
+                color = Color.Black,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold
+            )
+        }
 
         Box(
             modifier = Modifier

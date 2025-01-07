@@ -8,12 +8,14 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.kodein.rememberScreenModel
 import cafe.adriel.voyager.navigator.tab.CurrentTab
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabDisposable
 import cafe.adriel.voyager.navigator.tab.TabNavigator
+import org.example.project.sample.first.screen.event.AddEventScreen
 
-class NavigationTabScreen :Screen{
+class NavigationTabScreen : Screen{
 
     @Composable
     override fun Content() {

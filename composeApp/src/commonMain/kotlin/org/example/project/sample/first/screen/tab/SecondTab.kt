@@ -31,6 +31,8 @@ object SecondTab : Tab {
     @Composable
     override fun Content() {
        SecondScreen().Content();
+
+
     }
 
 

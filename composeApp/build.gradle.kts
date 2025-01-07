@@ -7,13 +7,15 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
+    kotlin("plugin.serialization") version "1.8.0" // O la última versión de Kotlin
+
 }
 
 kotlin {
     androidTarget {
         @OptIn(ExperimentalKotlinGradlePluginApi::class)
         compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
+            jvmTarget.set(JvmTarget.JVM_17)
         }
     }
     
@@ -30,6 +32,7 @@ kotlin {
 
             val voyagerVersion = "1.1.0-beta02"
 
+            implementation(libs.settings)
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material)
@@ -50,6 +53,11 @@ kotlin {
             // TabNavigator
             implementation("cafe.adriel.voyager:voyager-tab-navigator:$voyagerVersion")
 
+            //date
+            implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
+
+            // Kotlinx Serialization
+            implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
@@ -80,13 +88,15 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 }
 
 dependencies {
     implementation(libs.androidx.ui.desktop)
+    implementation(libs.androidx.material3.jvmstubs)
+    implementation(libs.androidx.material3.android)
     debugImplementation(compose.uiTooling)
 }
 
